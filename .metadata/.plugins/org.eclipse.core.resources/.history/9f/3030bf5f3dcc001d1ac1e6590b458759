@@ -1,0 +1,43 @@
+package com.edu.springshop.model.member;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.edu.springshop.domain.Member;
+import com.edu.springshop.exception.EmailException;
+import com.edu.springshop.exception.HashException;
+import com.edu.springshop.exception.MemberException;
+import com.edu.springshop.util.EmailManager;
+import com.edu.springshop.util.PassConverter;
+
+@Service
+public class MemberServiceImpl implements MemberService{
+	@Autowired
+	private MemberDAO memberDAO;
+	
+	@Autowired
+	private PassConverter passConverter;
+	
+	@Autowired
+	private EmailManager emailManager;
+	
+	@Autowired
+	private SnSDAO snsDAO;
+
+	@Override
+	public Member selectById(String uid) {
+		return memberDAO.selectById(uid);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void regist(Member member) throws HashException, EmailException, MemberException{
+		//현재 가입하려고 하는 회원이 어떤 sns 유형으로 가입하는지 조사
+		
+		//insert
+	}
+}

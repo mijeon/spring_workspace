@@ -1,0 +1,27 @@
+package com.edu.springshop.model.member;
+
+import java.util.List;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.edu.springshop.domain.Member;
+import com.edu.springshop.exception.MemberException;
+
+@Repository
+public class MybatisMemberDAO implements MemberDAO{
+
+	@Override
+	public Member selectById(String uid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void insert(Member member) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

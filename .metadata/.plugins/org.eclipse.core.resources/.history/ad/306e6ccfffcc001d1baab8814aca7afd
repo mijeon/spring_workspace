@@ -1,0 +1,13 @@
+package com.edu.springshop.shop.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class PaymentController {
+	//결제 요청 성공 시 호출되는 콜백메서드 정의
+	public ModelAndView paymentCallback() {
+		
+		return null;
+	}
+}

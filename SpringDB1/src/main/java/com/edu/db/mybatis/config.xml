@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.edu.db.domain.Board" alias="Board"/>
+	</typeAliases>
+	
+  <!-- 스프링이 db연동을 주도하기 때문에 root-context.xml에 등록 -->
+  
+  <mappers>
+    <mapper resource="com/edu/db/mybatis/BoardMapper.xml"/>
+  </mappers>
+  
+</configuration>

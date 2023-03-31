@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function getCookie(cname) {
+		//쿠키의 변수명으로 해당 값 추출하기
+		let v=getCookie("name");  //mijeon
+		
+		let name = cname + "=";
+		let decodedCookie = decodeURIComponent(document.cookie);  //선택사항으로 쿠키값을 평문화 시킴
+		let ca = decodedCookie.split(';');
+		
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

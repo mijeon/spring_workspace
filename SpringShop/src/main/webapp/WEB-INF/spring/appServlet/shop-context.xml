@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/websocket https://www.springframework.org/schema/websocket/spring-websocket.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.edu.springshop.shop.controller" />
+	
+	<!-- 공통 관심사항인 Bell을 Advice로 등록 -->
+	<beans:bean id="bell" class="com.edu.springshop.aop.Bell"/>
+	
+	<!-- 공통 관심사항인 CategoryAdvice를 Advice로 등록 -->
+	<beans:bean id="categoryAdvice" class="com.edu.springshop.aop.CategoryAdvice"/>
+	
+	<!-- 학생 등록 -->
+	<beans:bean id="student" class="com.edu.springshop.school.Student"/>
+	
+	<!-- 관점(Aspect : 공통로직+시점+지점) 정의 -->
+	<!--
+	<aop:config>
+		<aop:aspect ref="bell" id="bellAspect">
+			 지점 등록 
+			<aop:pointcut expression="execution(public * com.edu.springshop.school.Student..*(..))" id="bellPointcut"/>
+			 시점 등록, 어느 지점에 어느 시점에 관여할지 
+			<aop:before method="ding" pointcut-ref="bellPointcut"/>
+		</aop:aspect>
+	</aop:config>
+	-->
+	
+	<!-- 쇼핑몰 카테고리 가져오기 관점 정의 -->
+	<aop:config>
+		<aop:aspect ref="categoryAdvice" id="categoryAspect" >
+			<!-- aop:pointcut -> public 반환형 패키지 클래스 모든메서드(매개변수)-->
+			<aop:pointcut expression="execution(public * com.edu.springshop.shop.controller..*(..))" id="categoryPointcut"/>
+			<!-- around : 시점이 전후 -->
+			<aop:around method="getCategoryList" pointcut-ref="categoryPointcut"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- Rest 요청에 대한 글로벌 예외를 처리할 빈 등록, json 등의 데이터로 결과를 보여주는 예외객체 -->
+	<beans:bean id="restShopGlobalException" class="com.edu.springshop.aop.RestShopGlobalException"/>
+	
+	<!-- 글로벌 예외를 jsp로 결과를 보여주는 예외객체 빈 등록 -->
+	<beans:bean id="shopGlobalException" class="com.edu.springshop.aop.ShopGlobalException"/>
+	
+	<!-- 웹소켓 핸들러 등록 -->
+	<beans:bean id="chatHandler" class="com.edu.springshop.chat.ChatHandler"/>
+	
+	<!-- 웹소켓 설정 -->
+	<websocket:handlers>
+		<websocket:mapping handler="chatHandler" path="/chat"/>
+		<websocket:handshake-interceptors>
+			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>	
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+	
+	<!-- 구글 로그인 관련 정보 -->
+	<!-- GoogleLogin 빈등록 -->
+	<beans:bean id="googleLogin" class="com.edu.springshop.sns.GoogleLogin">
+		<!-- 1) 인증화면 관련 Start -->
+		<!-- 인증화면 링크 URL -->
+		<beans:property name="endpoint" value="https://accounts.google.com/o/oauth2/v2/auth"/>
+		
+		<!-- google cloude platform에서 발급받은 client ID -->
+		<beans:property name="client_id" value="168357542018-mapeglvfc04tkpg055os1lf2u67mecab.apps.googleusercontent.com"/>
+		
+		<!-- google cloude platform에서 발급받은 client Secret -->
+		<beans:property name="client_secret" value="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"/>
+		
+		<!-- Resource Owner가 인증할 때 콜백받을 우리 웹사이트 URI (컨트롤러가 받음) -->
+		<beans:property name="redirect_uri" value="http://localhost:7777/sns/google/callback"/>
+		
+		<!-- 콜백받을 때, 구글이 우리에게 전달할 파라미터 이름 -->
+		<beans:property name="response_type" value="code"/>
+		
+		<!-- Resource Owner로부터 어떤 정보를 수집할지 그 범위설정 -->
+		<beans:property name="scope" value="https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"/> 
+		<!-- 1) 인증화면 관련 End -->
+		
+		<!-- 2) 토큰 요청 관련 Start -->
+		<!-- 모든 sns 사업자가 같은 변수명 사용 -->
+		<beans:property name="grant_type" value="authorization_code"/>
+		
+		<beans:property name="token_request_url" value="https://oauth2.googleapis.com/token"/>
+		<!-- 2) 토큰 요청 관련 End -->
+		
+		<!-- 3) 회원정보 요청을 위한 url -->
+		<beans:property name="userinfo_url" value="https://www.googleapis.com/oauth2/v1/userinfo" />
+	</beans:bean>
+	
+	<!-- 네이버 로그인 관련 정보 -->
+	<!-- NaverLogin 빈등록 -->
+	<beans:bean id="naverLogin" class="com.edu.springshop.sns.NaverLogin">
+			
+		<!-- 1) 인증화면 관련 Start -->
+		<!-- 인증화면 링크 URL -->
+		<beans:property name="endpoint" value="https://nid.naver.com/oauth2.0/authorize"/>
+		
+		<!-- developers.naver.com에서 발급받은 client ID -->
+		<beans:property name="client_id" value="iknTFRYwDE15j7kHEqOs"/>
+		
+		<!-- developers.naver.com에서 발급받은 client_secret -->
+		<beans:property name="client_secret" value="MGQdJnBwRb"/>
+		
+		<!-- Resource Owner가 인증할 때 콜백받을 우리 웹사이트 URI (컨트롤러가 받음) -->
+		<beans:property name="redirect_uri" value="http://localhost:7777/sns/naver/callback"/>
+		
+		<!-- 콜백받을 때, naver가 우리에게 전달할 파라미터 이름 -->
+		<beans:property name="response_type" value="code"/>
+		
+		<!-- 구분값 -->
+		<beans:property name="state" value="naver_login_by_zino"/>
+		<!-- 1) 인증화면 관련 End -->
+		
+		<!-- 2) 토큰 요청 관련 Start -->
+		<beans:property name="token_request_url" value="https://nid.naver.com/oauth2.0/token"/>
+		
+		<!-- 모든 sns 사업자가 같은 변수명 사용 -->
+		<beans:property name="grant_type" value="authorization_code"/>
+		<!-- 2) 토큰 요청 관련 End -->
+		
+		<!-- 3) 회원정보 요청을 위한 url -->
+		<beans:property name="userinfo_url" value="https://openapi.naver.com/v1/nid/me" />
+	</beans:bean>
+	
+		<!-- 카카오 로그인 관련 정보 -->
+		<!-- GoogleLogin 빈등록 -->
+		<beans:bean id="kakaoLogin" class="com.edu.springshop.sns.KakaoLogin">
+			
+		<!-- 1) 인증화면 관련 Start -->
+		<!-- 인증화면 링크 URL -->
+		<beans:property name="endpoint" value="https://kauth.kakao.com/oauth/authorize"/>
+		
+		<!-- google cloude platform에서 발급받은 client ID -->
+		<beans:property name="client_id" value="6c430dc860add47a17129e1a3d6cc7b6"/>
+		
+		<!-- Resource Owner가 인증할 때 콜백받을 우리 웹사이트 URI (컨트롤러가 받음) -->
+		<beans:property name="redirect_uri" value="http://localhost:7777/sns/kakao/callback"/>
+		
+		<!-- 콜백받을 때, 구글이 우리에게 전달할 파라미터 이름 -->
+		<beans:property name="response_type" value="code"/>
+		<!-- 1) 인증화면 관련 End -->
+		
+		<!-- 2) 토큰 요청 관련 Start -->
+		<beans:property name="token_request_url" value="https://kauth.kakao.com/oauth/token"/>
+		
+		<!-- 모든 sns 사업자가 같은 변수명 사용 -->
+		<beans:property name="grant_type" value="authorization_code"/>
+		<!-- 2) 토큰 요청 관련 End -->
+		
+		<!-- 3) 회원정보 요청을 위한 url -->
+		<beans:property name="userinfo_url" value="https://kapi.kakao.com/v2/user/me"/>
+	</beans:bean>
+	
+</beans:beans>

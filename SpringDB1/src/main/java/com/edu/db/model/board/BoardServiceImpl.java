@@ -1,0 +1,43 @@
+package com.edu.db.model.board;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.edu.db.domain.Board;
+import com.edu.db.exception.BoardException;
+
+@Service
+public class BoardServiceImpl implements BoardService{
+	@Autowired
+	//어떤 DAO를 사용할지 명시해줌
+	@Qualifier("mybatisBoardDAO")
+	private BoardDAO boardDAO;
+	
+	@Override
+	public List SelectAll() {
+		return boardDAO.SelectAll();
+	}
+
+	@Override
+	public Board select(int board_idx) {
+		return boardDAO.select(board_idx);
+	}
+
+	@Override
+	public void insert(Board board) throws BoardException {
+		boardDAO.insert(board);
+	}
+
+	@Override
+	public void update(Board board) throws BoardException{
+		boardDAO.update(board);
+	}
+
+	@Override
+	public void delete(int board_idx) throws BoardException{
+		boardDAO.delete(board_idx);
+	}
+}

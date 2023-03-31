@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function getCookie(cname) {
+		//쿠키의 변수명으로 해당 값 추출하기
+		let name = cname + "=";
+		console.log("검색에 사용되는 네임값은 ", name);
+		
+		let decodedCookie = decodeURIComponent(document.cookie);  //선택사항으로 쿠키값을 평문화 시킴
+		console.log("평문으로 전환된 쿠키값은 ", decodedCookie);
+		
+		/*
+		let ca = decodedCookie.split(';');
+		
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i];
+			while (c.charAt(0) == ' ') {
+				c = c.substring(1);
+			}if (c.indexOf(name) == 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		*/
+		return "";
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+package com.edu.springshop.shop.controller;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class PaymentController {
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
+	
+	//결제 요청 성공 시 호출되는 콜백메서드 정의
+	@GetMapping("/payment/callback/success")
+	public ModelAndView paymentCallback(HttpServletRequest request, String paymentKey, String orderId, int amount) {
+		logger.info("결제요청 성공");
+		
+		/*
+		if() {  //내가 요청한 금액과 결제요청 성공 시 날아온 금액이 일치하는 경우
+			
+		}
+		*/
+		
+		//결제승인 요청(post로 승인을 요청해야 함)
+		HttpRequest req = HttpRequest.newBuilder()
+			    .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
+			    .header("Authorization", "Basic dGVzdF9za183RExKT3BtNVFybEJFNEpXdzVQM1BOZHhiV25ZOg==")
+			    .header("Content-Type", "application/json")
+			    .method("POST", HttpRequest.BodyPublishers.ofString("{\"paymentKey\":\""+paymentKey+"\",\"amount\":15000,\"orderId\":\"602BtkG-BIZ_tC0O5GYji\"}"))
+			    .build();
+			try {
+				HttpResponse<String> response = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
+				logger.info(response.body());
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
+		return null;
+	}
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.edu.springboard.domain.ReBoard" alias="ReBoard"/>
+		<typeAlias type="com.edu.springboard.domain.Gallery" alias="Gallery"/>
+		<typeAlias type="com.edu.springboard.domain.Photo" alias="Photo"/>
+		<typeAlias type="com.edu.springboard.domain.Notice" alias="Notice"/>
+	</typeAliases>
+
+	<!-- 6) 스프링이 주도해야 하므로 모델에 관련된 업무는 root-context에 등록함 -> 모든 서블릿에서 공유되어야 함-->
+	
+	<mappers>
+		<mapper resource="com/edu/springboard/mybatis/ReBoardMapper.xml" />
+		<mapper resource="com/edu/springboard/mybatis/GalleryMapper.xml" />
+		<mapper resource="com/edu/springboard/mybatis/PhotoMapper.xml" />
+		<mapper resource="com/edu/springboard/mybatis/NoticeMapper.xml" />
+	</mappers>
+</configuration>

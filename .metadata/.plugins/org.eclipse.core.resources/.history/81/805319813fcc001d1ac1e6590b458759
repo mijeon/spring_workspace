@@ -1,0 +1,10 @@
+package com.edu.springshop.model.member;
+
+import java.util.List;
+
+import com.edu.springshop.domain.Member;
+
+public interface MemberService {
+	public Member selectById(String uid);
+	public void regist(Member member);  //암호화 + 메일발송 + db
+}

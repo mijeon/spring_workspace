@@ -1,0 +1,145 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdminLTE 3 | Dashboard</title>
+<style type="text/css">
+.box-style{
+	width:90px;
+	height:95px;
+	border:1px solid #ccc;
+	display:inline-block;
+	margin:5px;
+}
+</style>
+<%@ include file="../inc/header_link.jsp"%>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+
+		<!-- Preloader -->
+		<%@ include file="../inc/preloader.jsp"%>
+		<!-- Navbar -->
+		<%@include file="../inc/navbar.jsp"%>
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<%@include file="../inc/sidebar_left.jsp"%>
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Dashboard</h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item active">Dashboard v1</li>
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content" id="app1">
+				<div class="card card-info">
+					<div class="card-header">
+						<h3 class="card-title">Quick Example</h3>
+					</div>
+					<!-- /.card-header -->
+					<!-- form start -->
+					<form>
+						<div class="card-body">
+							<div class="form-group row">
+								<select class="form-control" name="category_idx"></select>
+							</div>
+							<div class="form-group row">
+								<input type="text" class="form-control" name="product_name" placeholder="상품명">
+							</div>
+							<div class="form-group row">
+								<input type="text" class="form-control" name="brand" placeholder="브랜드">
+							</div>
+							<div class="form-group row">
+								<input type="number" class="form-control" name="price" placeholder="가격">
+							</div>
+							<div class="form-group row">
+								<input type="number" class="form-control" name="discount" placeholder="할인가">
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<input type="file" class="form-control" name="file" multiple="multiple">
+								</div>
+							</div>
+	                        <div class="form-group row">
+		                        <template v-for="i in count">
+		                        	
+		                        </template>
+		                    </div>
+	                        </div>
+							<div class="form-group row">
+		                        <div class="col">
+		                            <textarea class="form-control" placeholder="상세내용"  id="detail" name="detail"></textarea>
+		                        </div>
+	                        </div>
+						</div>
+						<!-- /.card-body -->
+	
+						<div class="card-footer">
+							<button type="button" class="btn btn-info" id="bt_regist">등록</button>
+							<button type="button" class="btn btn-info" id="bt_list">목록</button>
+						</div>
+					</form>
+				</div>
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+		<%@include file="../inc/footer.jsp"%>
+		<!-- Control Sidebar -->
+		<%@include file="../inc/sidebar_rigth.jsp"%>
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+	<%@ include file="../inc/footer_link.jsp"%>
+	<script type="text/javascript">
+		let app1;
+		const imgbox={
+			template=`
+				<div class="box-style">
+        		<div>X</div>
+        		<img src=""/>
+        	</div>
+			`,
+			data():{
+				return{
+					
+				};
+			}
+		};
+		
+		app1=new Vue({
+			el:"#app1",
+			data:{
+				count:10
+			}
+		});
+	
+		//서머노트 적용하기
+		$(function(){
+			$("#detail").summernote();
+				hieght:300;
+		});
+	</script>
+</body>
+</html>

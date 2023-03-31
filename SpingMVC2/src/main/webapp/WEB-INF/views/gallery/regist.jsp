@@ -1,0 +1,57 @@
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>갤러리 글등록</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<!-- Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#bt_regist").click(function(){
+			$("#form1").attr({
+				action:"/board/regist",
+				method:"post"
+			});
+			$("#form1").submit();
+		});
+		$("#bt_list").click(function(){
+			//get 방식
+			location.href="/board/list";
+		});
+	});
+</script>
+</head>
+<body>
+	<div class="container mt-3">
+		<div class="row">
+			<div class="col">
+				<form id="form1">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Enter title" name="title">
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Enter writer" name="writer">
+					</div>
+					<div class="form-group">
+						<textarea type="text" class="form-control" placeholder="Enter content" name="content"></textarea>
+					</div>
+					<div class="form-group">
+						<input type="file" class="form-control" name="file">
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-outline-success" id="bt_regist">등록</button>
+						<button type="button" class="btn btn-outline-success" id="bt_list">목록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

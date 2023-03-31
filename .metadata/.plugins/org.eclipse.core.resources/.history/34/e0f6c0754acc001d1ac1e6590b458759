@@ -1,0 +1,5 @@
+package com.edu.springshop.shop.controller;
+
+public class RestShopController {
+
+}

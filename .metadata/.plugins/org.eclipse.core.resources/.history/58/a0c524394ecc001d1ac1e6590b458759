@@ -1,0 +1,7 @@
+package com.edu.springshop.model.product;
+
+import java.util.List;
+
+public interface CartService {
+	public List selectAll();
+}

@@ -1,0 +1,29 @@
+package com.edu.springshop.model.member;
+
+import java.util.List;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.edu.springshop.domain.Member;
+import com.edu.springshop.exception.MemberException;
+
+@Repository
+public class MybatisMemberDAO implements MemberDAO{
+	@Autowired
+	private SqlSessionTemplate sqlSessionTamplate;
+	
+	@Override
+	public Member selectById(Member member) {
+		return sqlSessionTamplate.selectOne("Member.selectById", member);
+	}
+
+	@Override
+	public void insert(Member member) {
+		int result=sqlSessionTamplate.insert("Member.insert", member);
+		if(result<1){
+			throw new MemberException("회원가입 실패");
+		}
+	}
+}

@@ -1,0 +1,5 @@
+package com.edu.springshop.model.member;
+
+public class MybatisSnSDAO {
+
+}
